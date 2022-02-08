@@ -5,9 +5,11 @@ app.use(express.json());
 const userRoutes = require('./routes/user');
 const path = require('path');
 const saucesRoutes = require('./routes/sauces');
-const helmet = require('helmet')
+const helmet = require('helmet');
 
-mongoose.connect('mongodb+srv://kishador:pastore27@cluster0.wdbvh.mongodb.net/test?retryWrites=true&w=majority',
+require('dotenv').config();
+
+mongoose.connect(process.env.DB_PATH,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
