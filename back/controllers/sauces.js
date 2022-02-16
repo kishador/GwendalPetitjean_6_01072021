@@ -13,15 +13,25 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-  const sauceObject = req.file ?
-    {
+  let sauceObject;
+  if (req.file) {
+    sauceObject = {
       ...JSON.parse(req.body.sauce),
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body };
-  Sauces.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Sauce modifiée !' }))
-    .catch(error => res.status(400).json({ error }));
+      imageUrl: `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`,
+    };
+  } else {
+    sauceObject = { ...req.body };
+  }
+  Sauce.updateOne(
+    { _id: req.params.id, userId: sauceObject.userId },
+    { ...sauceObject }
+  )
+    .then(() => res.status(200).json({ message: "Objet modifié !" }))
+    .catch((error) => res.status(400).json({ error }));
 };
+
 
 exports.getAllSauce = (req, res, next) => {
   Sauces.find()
